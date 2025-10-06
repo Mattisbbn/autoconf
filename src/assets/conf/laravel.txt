@@ -1,0 +1,35 @@
+server {
+    server_name :{url}:;
+
+    root :{indexPath}:;
+    index index.php;
+
+    access_log  :{accesslog}:;
+    error_log   :{errorlog}:;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/run/php/php:{FPMVersion}:-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+
+    location ~* \.(jpg|jpeg|png|gif|ico|webp|svg|css|js|woff2?|ttf|eot)$ {
+        expires :{cacheduration}:;
+        add_header Cache-Control "public";
+    }
+	
+	
+	gzip :{gzip}:;
+	gzip_types text/css application/javascript image/svg+xml;
+	gzip_min_length 256;
+
+}
