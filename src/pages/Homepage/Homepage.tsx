@@ -4,6 +4,7 @@ import TechnoCard from "../../components/TechnoCard"
 import { Icon } from "@iconify/react"   
 import { configFileHandler } from "../../utils/configFile"
 import InputText from "../../components/InputText"
+import { toast } from "react-toastify"
 
 
 
@@ -22,8 +23,7 @@ export default function Homepage() {
     reversePort: "",
   })
 
-
-
+  const [popup, setPopup] = useState<boolean>(false)
 
   return (
     <BaseLayout>
@@ -40,7 +40,7 @@ export default function Homepage() {
      
 
       
-{selectedTechno && (<>
+        {selectedTechno && (<>
             <InputText label="URL du site web" icon="iconamoon:link-bold" value={config.url} onChange={(e) => (
                 setConfig({...config, url: e.target.value , accessLog: "/var/log/nginx/" + e.target.value + ".access.log", errorLog: "/var/log/nginx/" + e.target.value + ".error.log"})
             )} placeholder="https://nomdusite.fr" />
@@ -90,10 +90,65 @@ export default function Homepage() {
                 )
             }
 
-            <button onClick={() => configFileHandler(config, selectedTechno)} className="bg-azure-radiance-600 hover:bg-azure-radiance-700 cursor-pointer w-full mt-8 text-white px-4 py-2 rounded-lg h-12 flex items-center justify-center gap-2 ">Générer <Icon icon="iconamoon:arrow-right-1-light" className="w-6 h-6  text-white " /></button>
+            <button onClick={() => (
+                configFileHandler(config, selectedTechno),
+                setPopup(true)
+
+            )} className="bg-azure-radiance-600 hover:bg-azure-radiance-700 cursor-pointer w-full mt-8 text-white px-4 py-2 rounded-lg h-12 flex items-center justify-center gap-2 ">Générer <Icon icon="iconamoon:arrow-right-1-light" className="w-6 h-6  text-white " /></button>
 
             </>)}
       </section>
+
+    {popup && (
+        <div className="fixed inset-0 bg-white/40 flex items-center justify-center text-white ">
+            <div className="bg-blue-charcoal-950 p-4 rounded-lg relative">
+            <button onClick={() => setPopup(false)} className=" absolute right-3 top-3 cursor-pointer">
+                    <Icon icon="iconamoon:close-bold" className="w-7 h-7  text-white " />
+            </button>
+                <h3 className="text-2xl mb-4">Configuration générée avec succès</h3>
+               
+
+                <h4 className="text-lg mb-2">Aide :</h4>
+
+                <p className="mt-4 mb-2">Lien symbolique: </p>
+                <code className="text-sm bg-gray-700/50 p-2 rounded-lg relative pe-10 cursor-pointer" onClick={() => (
+                    navigator.clipboard.writeText("sudo apt install certbot python3-certbot-nginx -y"),
+                    toast.success("Code copié dans le presse-papiers",{
+                      icon: <Icon icon="lets-icons:check-fill" className="w-6 h-6  text-white " />
+                    })
+                )}>
+                    sudo ln -s /etc/nginx/sites-available/{config.url}.conf /etc/nginx/sites-enabled/
+                    <Icon icon="iconamoon:copy-bold" className="w-5 h-5  text-white absolute right-2 top-1/2 -translate-y-1/2 " />
+                </code>
+
+
+
+
+                <p className="mt-4 mb-2">Installer certbot: </p>
+                <code className="text-sm bg-gray-700/50 p-2 rounded-lg relative pe-10 cursor-pointer" onClick={() => (
+                    navigator.clipboard.writeText("sudo apt install certbot python3-certbot-nginx -y"),
+                    toast.success("Code copié dans le presse-papiers",{
+                      icon: <Icon icon="lets-icons:check-fill" className="w-6 h-6  text-white " />
+                    })
+                )}>
+                    sudo apt install certbot python3-certbot-nginx -y
+                    <Icon icon="iconamoon:copy-bold" className="w-5 h-5  text-white absolute right-2 top-1/2 -translate-y-1/2 " />
+                </code>
+                <p className="mt-4 mb-2">Installer le certificat: </p>
+                <code className="text-sm bg-gray-700/50 p-2 rounded-lg relative pe-10 cursor-pointer" onClick={() => (
+                    navigator.clipboard.writeText("sudo certbot --nginx -d " + config.url),
+                    toast.success("Code copié dans le presse-papiers",{
+                      icon: <Icon icon="lets-icons:check-fill" className="w-6 h-6  text-white " />
+                    })
+                )}>
+                    sudo certbot --nginx -d {config.url}
+                    <Icon icon="iconamoon:copy-bold" className="w-5 h-5  text-white absolute right-2 top-1/2 -translate-y-1/2 " />
+                </code>
+            </div>
+        </div>
+    )}
+
+
     </BaseLayout>
   )
 }

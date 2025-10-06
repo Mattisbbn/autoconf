@@ -1,0 +1,7 @@
+Lien symbolique : 
+
+sudo ln -s /etc/nginx/sites-available/btspma.kevinniel.fr.conf /etc/nginx/sites-enabled/
+
+Certif
+sudo apt install certbot python3-certbot-nginx -y
+sudo certbot --nginx -d NOM_DE_DOMAINE

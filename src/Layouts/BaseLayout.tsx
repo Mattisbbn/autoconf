@@ -1,11 +1,16 @@
 import Header from "../components/Header"
+import Footer from "../components/Footer"
 
 
 export default function BaseLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="bg-blue-charcoal-950 min-h-screen">
-      <Header />
+    <>
+    <Header />
+    <main className="h-full flex-1">
+      
       {children}
     </main>
+    <Footer />
+    </>
   )
 }
