@@ -1,7 +1,8 @@
 import laravel from "../assets/conf/laravel.txt?raw"
+import react from "../assets/conf/react.txt?raw"
 
 
-export function makeConfigFile(config: {url: string, indexPath: string, accessLog: string, errorLog: string, FPMVersion: string, cacheDuration: string, gzip: string}, techno: string) {
+export function makeConfigFile(config: {url: string, indexPath: string, accessLog: string, errorLog: string, FPMVersion: string, cacheDuration: string, gzip: string , reversePort: string , cacheUnit: string}, techno: string) {
     if (techno === "Laravel") {
         return laravel.
         replace(":{url}:", config.url).
@@ -9,9 +10,22 @@ export function makeConfigFile(config: {url: string, indexPath: string, accessLo
         replace(":{accesslog}:", config.accessLog).
         replace(":{errorlog}:", config.errorLog).
         replace(":{FPMVersion}:", config.FPMVersion).
-        replace(":{cacheduration}:", config.cacheDuration).
+        replace(":{cacheduration}:", config.cacheDuration + config.cacheUnit).
         replace(":{gzip}:", config.gzip);
-      
+    }else if (techno === "React") {
+        let reactData = react;
+        if (config.reversePort === "") {
+            reactData = reactData.replace(/:\/:reverse:\/:[\s\S]*?:\/:reverse:\/:/g, "");
+        }
+
+        return reactData.
+        replace(":{url}:", config.url).
+        replace(":{indexPath}:", config.indexPath).
+        replace(":{accesslog}:", config.accessLog).
+        replace(":{errorlog}:", config.errorLog).
+        replace(":{cacheduration}:", config.cacheDuration + config.cacheUnit).
+        replace(":{gzip}:", config.gzip).
+        replace(":{reverse_port}:", config.reversePort);
     }
 }
 
@@ -24,7 +38,7 @@ export function downloadConfigFile(data: string,config: {url: string}) {
     a.click();
 }
 
-export function configFileHandler(config: {url: string, indexPath: string, accessLog: string, errorLog: string, FPMVersion: string, cacheDuration: string, gzip: string}, techno: string) {
+export function configFileHandler(config: {url: string, indexPath: string, accessLog: string, errorLog: string, FPMVersion: string, cacheDuration: string, gzip: string , reversePort: string , cacheUnit: string}, techno: string) {
     const data = makeConfigFile(config, techno);
 
     if (data) {

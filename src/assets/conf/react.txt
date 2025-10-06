@@ -1,0 +1,32 @@
+server {
+    server_name :{url}:;
+
+    root :{indexPath}:;
+    index index.html;
+
+    access_log  :{accesslog}:;
+    error_log   :{errorlog}:;
+
+    location / {
+        try_files $uri /index.html;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+
+       location ~* \.(jpg|jpeg|png|gif|ico|webp|svg|css|js|woff2?|ttf|eot)$ {
+        expires :{cacheduration}:;
+        add_header Cache-Control "public";
+    }
+:/:reverse:/:
+    location /api/ {
+        proxy_pass http://127.0.0.1::{reverse_port}:;  # ton Node écoute ici
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+:/:reverse:/:
+}
