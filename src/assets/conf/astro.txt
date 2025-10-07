@@ -1,0 +1,19 @@
+
+server {
+    server_name :{url}:;
+
+    root :{indexPath}:;
+    index index.html;
+
+    # Configuration pour Astro SSG avec gestion 404
+    location / {
+        try_files $uri $uri/ $uri.html @fallback;
+    }
+
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|webp)$ {
+        expires :{cacheduration}:;
+        add_header Cache-Control "public, immutable";
+        try_files $uri =404;
+    }
+
+}

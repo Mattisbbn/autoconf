@@ -1,5 +1,6 @@
 import laravel from "../assets/conf/laravel.txt?raw"
 import react from "../assets/conf/react.txt?raw"
+import astro from "../assets/conf/astro.txt?raw"
 
 
 export function makeConfigFile(config: {url: string, indexPath: string, accessLog: string, errorLog: string, FPMVersion: string, cacheDuration: string, gzip: string , reversePort: string , cacheUnit: string}, techno: string) {
@@ -17,7 +18,6 @@ export function makeConfigFile(config: {url: string, indexPath: string, accessLo
         if (config.reversePort === "") {
             reactData = reactData.replace(/:\/:reverse:\/:[\s\S]*?:\/:reverse:\/:/g, "");
         }
-
         return reactData.
         replace(":{url}:", config.url).
         replace(":{indexPath}:", config.indexPath).
@@ -26,6 +26,13 @@ export function makeConfigFile(config: {url: string, indexPath: string, accessLo
         replace(":{cacheduration}:", config.cacheDuration + config.cacheUnit).
         replace(":{gzip}:", config.gzip).
         replace(":{reverse_port}:", config.reversePort);
+    }else if (techno === "Astro") {
+        return astro.
+        replace(":{url}:", config.url).
+        replace(":{indexPath}:", config.indexPath).
+        replace(":{accesslog}:", config.accessLog).
+        replace(":{errorlog}:", config.errorLog).
+        replace(":{cacheduration}:", config.cacheDuration + config.cacheUnit);
     }
 }
 

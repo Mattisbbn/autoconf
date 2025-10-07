@@ -61,7 +61,7 @@ export default function Homepage() {
                 <div className="relative flex flex-col w-full ">
                     <Icon icon="iconamoon:clock-bold" className="absolute left-4 top-1/2 w-6 h-6 -translate-y-1/2 text-gray-500" />
                     <div className="flex flex-row ">
-                        <input value={config.cacheDuration} onChange={(e) => setConfig({...config, cacheDuration: e.target.value})} type="text" placeholder="0" className="w-full ps-12 p-4 rounded-l-lg bg-gray-700/50 text-white h-12" />
+                        <input value={config.cacheDuration} onChange={(e) => setConfig({...config, cacheDuration: e.target.value})} type="text" placeholder="30" className="w-full ps-12 p-4 rounded-l-lg bg-gray-700/50 text-white h-12" />
                         <select value={config.cacheUnit} onChange={(e) => setConfig({...config, cacheUnit: e.target.value})} name="cache-unit" className="  p-4 rounded-r-lg bg-gray-700/50 text-white h-12 border-l-2 border-gray-700/50 ">
                             <option  value="h">Heures</option>
                             <option value="d">Jours</option>
